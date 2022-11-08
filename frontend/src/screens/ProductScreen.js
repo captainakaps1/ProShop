@@ -4,13 +4,13 @@ import { Link, useParams } from "react-router-dom";
 import Ratings from "../components/Ratings";
 import axios from 'axios';
 
-const ProductScreen = ({ match }) => {
+const ProductScreen = () => {
   const params = useParams();
   const [product, setProduct] = useState({})
 
   useEffect(() =>{
     const fetchProduct = async () => { 
-      const { data } = await axios.get(`/api/product/${params.id}`);
+      const { data } = await axios.get(`/api/products/${params.id}`);
 
       setProduct(data)
     }
