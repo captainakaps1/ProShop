@@ -1,7 +1,8 @@
 const express = require("express");
-const dotenv = require("dotenv"); 
+const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const productRoutes = require('./routes/productsRoutes');
+const productRoutes = require("./routes/productsRoutes");
+const userRoutes = require("./routes/userRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 dotenv.config();
@@ -10,12 +11,22 @@ connectDB();
 
 const app = express();
 
-app.use('/api/products', productRoutes);
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("API is running....");
+});
+
+app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 app.use(notFound);
 
-app.use(errorHandler)
+app.use(errorHandler);
 
-const port = process.env.PORT || 4200
+const port = process.env.PORT || 4200;
 
-app.listen(port, console.log(`server running in ${process.env.NODE_ENV} mode on port ${port}`));
+app.listen(
+  port,
+  console.log(`server running in ${process.env.NODE_ENV} mode on port ${port}`)
+);
