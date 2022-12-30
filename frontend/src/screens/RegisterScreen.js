@@ -33,7 +33,7 @@ const RegisterScreen = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate(redirect);
+      navigate(`/${redirect}`);
     }
   }, [userInfo, navigate, redirect]);
 
@@ -44,7 +44,7 @@ const RegisterScreen = () => {
       {message && <Message varient="danger">{message}</Message>}
       {error && <Message varient="danger">{error}</Message>}
       <Form onSubmit={submitHandler}>
-        <Form.Group controlId="name">
+        <Form.Group controlId="name" className="mt-3">
           <Form.Label>Full Name</Form.Label>
           <Form.Control
             type="text"
@@ -54,7 +54,7 @@ const RegisterScreen = () => {
             required
           ></Form.Control>
         </Form.Group>
-        <Form.Group controlId="email">
+        <Form.Group controlId="email" className="mt-3">
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
@@ -64,7 +64,7 @@ const RegisterScreen = () => {
             required
           ></Form.Control>
         </Form.Group>
-        <Form.Group controlId="password">
+        <Form.Group controlId="password" className="mt-3">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
@@ -74,7 +74,7 @@ const RegisterScreen = () => {
             required
           ></Form.Control>
         </Form.Group>
-        <Form.Group controlId="confirmPassword">
+        <Form.Group controlId="confirmPassword" className="mt-3">
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type="password"
