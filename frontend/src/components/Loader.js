@@ -101,3 +101,46 @@ export const ProductDetailLoader = () => {
     </Row>
   );
 };
+
+export const OrderDetailsLoader = () => {
+  return (
+    <>
+      <Row>
+        <Col md={8}>
+          <ListGroup variant="flush">
+            <ListGroupItem>
+              <Placeholder as="h2" animation="glow">
+                <Placeholder xs={6} />
+              </Placeholder>
+              <Placeholder as="span" animation="glow">
+                <Placeholder xs={12} />
+              </Placeholder>
+            </ListGroupItem>
+            <ListGroupItem>
+              <Placeholder as="h2" animation="glow">
+                <Placeholder xs={6} />
+              </Placeholder>
+              <Placeholder as="span" animation="glow">
+                <Placeholder xs={12} />
+              </Placeholder>
+            </ListGroupItem>
+            <ListGroupItem>
+              <Placeholder as="h3" animation="glow">
+                <Placeholder xs={6} />
+              </Placeholder>
+              <Placeholder as="span" animation="glow">
+                <Placeholder xs={12} />
+              </Placeholder>
+              <Placeholder as="span" animation="glow">
+                <Placeholder xs={12} />
+              </Placeholder>
+              <Placeholder as="span" animation="glow">
+                <Placeholder xs={12} />
+              </Placeholder>
+            </ListGroupItem>
+          </ListGroup>
+        </Col>
+      </Row>
+    </>
+  );
+};
