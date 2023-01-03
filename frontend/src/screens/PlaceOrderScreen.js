@@ -10,9 +10,11 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { resetCart } from "../actions/cartActions";
 import { createOrder } from "../actions/orderActions";
 import CheckoutSteps from "../components/CheckoutSteps";
 import Message from "../components/Message";
+import { CART_RESET_ITEM } from "../constants/cartConstants";
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
@@ -44,6 +46,8 @@ const PlaceOrderScreen = () => {
         totalPrice: cart.totalPrice,
       })
     );
+
+    dispatch(resetCart());
   };
 
   useEffect(() => {
