@@ -67,6 +67,23 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.send(users);
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.remove();
+    res.send({ message: "User removed" });
+  } else {
+    res.status(401);
+    throw new Error("User not found");
+  }
+});
+
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -92,4 +109,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { authUser, getUserProfile, createUser, updateUserProfile };
+module.exports = {
+  authUser,
+  getUserProfile,
+  createUser,
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+};

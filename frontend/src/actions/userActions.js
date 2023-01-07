@@ -1,6 +1,10 @@
 import axios from "axios";
 import { MY_ORDERS_RESET } from "../constants/orderConstants";
 import {
+  USER_ADMIN_LIST_FAIL,
+  USER_ADMIN_LIST_REQUEST,
+  USER_ADMIN_LIST_RESET,
+  USER_ADMIN_LIST_SUCCESS,
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -62,6 +66,9 @@ export const logout = () => async (dispatch) => {
   });
   dispatch({
     type: MY_ORDERS_RESET,
+  });
+  dispatch({
+    type: USER_ADMIN_LIST_RESET,
   });
 };
 
@@ -165,6 +172,40 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_ADMIN_LIST_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get("/api/users", config);
+
+    dispatch({
+      type: USER_ADMIN_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_ADMIN_LIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
