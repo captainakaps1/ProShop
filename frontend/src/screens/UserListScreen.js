@@ -3,7 +3,7 @@ import { Button, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { getUsers } from "../actions/userActions";
+import { deleteUser, getUsers } from "../actions/userActions";
 import { OrderDetailsLoader } from "../components/Loader";
 import Message from "../components/Message";
 
@@ -17,14 +17,21 @@ const UserListScreen = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const deleteHandler = (id) => {};
+  const userAdminDelete = useSelector((state) => state.userAdminDelete);
+  const { success } = userAdminDelete;
+
+  const deleteHandler = (id) => {
+    if (!window.confirm("Are you sure?")) return;
+    dispatch(deleteUser(id));
+  };
+
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(getUsers());
     } else {
       navigate("/login");
     }
-  }, [dispatch, navigate, userInfo]);
+  }, [dispatch, navigate, userInfo, success]);
 
   return (
     <>
@@ -60,18 +67,20 @@ const UserListScreen = () => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/user/${user._id}/edit`}>
+                  <LinkContainer to={`/admin/user/${user._id}/edit`}>
                     <Button variant="light" className="btn-sm">
                       <i className="fas fa-edit"></i>
                     </Button>
                   </LinkContainer>
-                  <Button
-                    variant="danger"
-                    className="btn-sm"
-                    onClick={deleteHandler(user._id)}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </Button>
+                  {!user.isAdmin && (
+                    <Button
+                      variant="danger"
+                      className="btn-sm"
+                      onClick={() => deleteHandler(user._id)}
+                    >
+                      <i className="fas fa-trash"></i>
+                    </Button>
+                  )}
                 </td>
               </tr>
             ))}
