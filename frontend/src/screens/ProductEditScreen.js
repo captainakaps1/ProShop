@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -15,6 +16,7 @@ const ProductEditScreen = () => {
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,6 +25,9 @@ const ProductEditScreen = () => {
 
   const productDetails = useSelector((state) => state.productDetails);
   const { error, product } = productDetails;
+
+  const userDetails = useSelector((state) => state.userDetails);
+  const { userInfo } = userDetails;
 
   const productAdminUpdate = useSelector((state) => state.productAdminUpdate);
   const {
@@ -46,6 +51,28 @@ const ProductEditScreen = () => {
         description,
       })
     );
+  };
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post("/api/upload", formData, config);
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+    }
   };
 
   useEffect(() => {
@@ -107,6 +134,16 @@ const ProductEditScreen = () => {
               value={image}
               onChange={(e) => setImage(e.target.value)}
             ></Form.Control>
+            <Form.Control
+              type="file"
+              onChange={uploadFileHandler}
+              disabled={uploading}
+            />
+            {uploading && (
+              <>
+                <Spinner animation="border" size="sm" /> uploading
+              </>
+            )}
           </Form.Group>
           <Form.Group controlId="brand" className="mt-3">
             <Form.Label>Brand</Form.Label>
