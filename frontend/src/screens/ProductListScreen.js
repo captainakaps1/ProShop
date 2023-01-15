@@ -3,10 +3,14 @@ import { Button, Col, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { listProducts } from "../actions/productActions";
-import { deleteUser, getUsers } from "../actions/userActions";
+import {
+  createProduct,
+  deleteProduct,
+  getProducts,
+} from "../actions/productActions";
 import { OrderDetailsLoader } from "../components/Loader";
 import Message from "../components/Message";
+import { PRODUCT_ADMIN_CREATE_RESET } from "../constants/productConstants";
 
 const ProductListScreen = () => {
   const dispatch = useDispatch();
@@ -18,20 +22,41 @@ const ProductListScreen = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const productAdminDelete = useSelector((state) => state.productAdminDelete);
+  const { success } = productAdminDelete;
+
+  const productAdminCreate = useSelector((state) => state.productAdminCreate);
+  const {
+    loading: loadingCreate,
+    success: successCreate,
+    error: errorCreate,
+    product: createdProduct,
+  } = productAdminCreate;
+
   const deleteHandler = (id) => {
     if (!window.confirm("Are you sure?")) return;
-    // dispatch(deleteUser(id));
+    dispatch(deleteProduct(id));
   };
 
-  const createProductHandler = () => {};
+  const createProductHandler = () => {
+    dispatch(createProduct());
+  };
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts());
-    } else {
+    dispatch({
+      type: PRODUCT_ADMIN_CREATE_RESET,
+    });
+
+    if (!userInfo.isAdmin) {
       navigate("/login");
     }
-  }, [dispatch, navigate, userInfo]);
+
+    if (successCreate) {
+      navigate(`/admin/product/${createdProduct._id}/edit`);
+    } else {
+      dispatch(getProducts());
+    }
+  }, [dispatch, navigate, userInfo, success, successCreate, createdProduct]);
 
   return (
     <>
@@ -45,6 +70,7 @@ const ProductListScreen = () => {
           </Button>
         </Col>
       </Row>
+      {errorCreate && <Message varient="danger">{errorCreate}</Message>}
       {loading ? (
         <OrderDetailsLoader />
       ) : error ? (

@@ -12,7 +12,7 @@ import {
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Ratings from "../components/Ratings";
 import { useDispatch, useSelector } from "react-redux";
-import { listProductDetails } from "../actions/productActions";
+import { getProductDetails } from "../actions/productActions";
 import { ProductDetailLoader } from "../components/Loader";
 import Message from "../components/Message";
 
@@ -22,7 +22,7 @@ const ProductScreen = () => {
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
   useEffect(() => {
-    dispatch(listProductDetails(params.id));
+    dispatch(getProductDetails(params.id));
   }, [params, dispatch]);
 
   return (

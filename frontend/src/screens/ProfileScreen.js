@@ -44,7 +44,7 @@ const ProfileScreen = () => {
     if (!userInfo) {
       navigate("/login");
     } else {
-      if (!user.name) {
+      if (!user?.name) {
         dispatch(getUserDetails("profile"));
         dispatch(getMyOrderDetails());
       } else {
