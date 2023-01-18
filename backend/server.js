@@ -7,6 +7,7 @@ const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const uploadRoute = require("./routes/uploadRoute");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const morgan = require("morgan");
 
 dotenv.config();
 
@@ -15,6 +16,10 @@ connectDB();
 const app = express();
 
 app.use(express.json());
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 app.get("/", (req, res) => {
   res.send("API is running....");
