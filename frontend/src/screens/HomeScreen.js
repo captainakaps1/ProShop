@@ -5,19 +5,33 @@ import Product from "../components/Product";
 import { getProducts } from "../actions/productActions";
 import { ProductsLoader } from "../components/Loader";
 import Message from "../components/Message";
+import { useParams } from "react-router-dom";
+import Paginate from "../components/Paginate";
+import ProductCarousel from "../components/ProductCarousel";
+import { Link } from "react-router-dom";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
+  const params = useParams();
+  const keyword = params.keyword;
+  const pageNumber = params.pageNumber || 1;
 
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products, page, pages } = productList;
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+    dispatch(getProducts(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
 
   return (
     <>
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link className="btn btn-sm btn-light my-3 rounded rounded-lg" to="/">
+          Go back
+        </Link>
+      )}
       <h1>Latest Products</h1>
       {loading ? (
         <Row>
@@ -30,13 +44,20 @@ const HomeScreen = () => {
       ) : error ? (
         <Message varient="danger">{error}</Message>
       ) : (
-        <Row>
-          {products.map((product) => (
-            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-              <Product product={product} />
-            </Col>
-          ))}
-        </Row>
+        <>
+          <Row>
+            {products.map((product) => (
+              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                <Product product={product} />
+              </Col>
+            ))}
+          </Row>
+          <Paginate
+            pages={pages}
+            page={page}
+            keyword={keyword ? keyword : ""}
+          />
+        </>
       )}
     </>
   );

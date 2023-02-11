@@ -26,6 +26,13 @@ function App() {
         <Container>
           <Routes>
             <Route path="/" element={<HomeScreen />} exact />
+            <Route
+              path="/search/:keyword/page/:pageNumber"
+              element={<HomeScreen />}
+              exact
+            />
+            <Route path="/search/:keyword" element={<HomeScreen />} exact />
+            <Route path="/page/:pageNumber" element={<HomeScreen />} exact />
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/shipping" element={<ShippingScreen />} />
             <Route path="/payment" element={<PaymentScreen />} />
@@ -33,7 +40,16 @@ function App() {
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="/product/:id" element={<ProductScreen />} />
-            <Route path="/admin/productlist" element={<ProductListScreen />} />
+            <Route
+              path="/admin/productlist"
+              element={<ProductListScreen />}
+              exact
+            />
+            <Route
+              path="/admin/productlist/:pageNumber"
+              element={<ProductListScreen />}
+              exact
+            />
             <Route
               path="/admin/product/:id/edit"
               element={<ProductEditScreen />}
